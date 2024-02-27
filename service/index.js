@@ -187,3 +187,17 @@ export const emailService=async(data)=>{
         console.log(error);
     }
 }
+
+export const projectService=async(data,user)=>{
+    try {
+        let data = user
+        console.log('data----', data);
+        const obj = {
+            message: 'file uploaded',
+            data: data
+        }
+        return obj
+    } catch (error) {
+        console.log(error);
+    }
+}
