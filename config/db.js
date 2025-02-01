@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
-let mongoConnect=mongoose.connect("mongodb+srv://rockey19981:Q6AbQ5to2gRjPxFx@cluster0.zzwvevl.mongodb.net/test")
+import dotenv from "dotenv";
+dotenv.config();
+let mongoConnect=mongoose.connect(process.env.MONGODB_CLOUD_URL)
 
 export default mongoConnect
