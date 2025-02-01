@@ -1,9 +1,11 @@
 import app  from './server.js';
 import mongoConnect from './config/db.js'
-const port=3000
+import env from 'dotenv'
+
+const PORT=process.env.PORT
 mongoConnect.then(()=>{
-    app.listen(port,()=>{
-        console.log(`Backend server start at ${port}`);
+    app.listen(PORT,()=>{
+        console.log(`Backend server start at 3000`);
         console.log("mongodb cloud connected");
     })
 }).catch((err)=>{

@@ -4,7 +4,8 @@ import {registerController,
         experienceController,
         getexperienceController,
         emailController,
-        projectController} from '../controller/controller.js'
+        projectController,
+        getprojectController} from '../controller/controller.js'
 import { jwtToken } from "../middleware/index.js";
 import multer from "multer";
 import { promises as fs } from 'fs';
@@ -31,6 +32,7 @@ router.get('/token',jwtToken)
 router.post('/experience',jwtToken,experienceController)
 router.get('/getexperience',getexperienceController)
 router.post('/frgtpwdEmail',emailController)
+router.get('/getprojects',getprojectController)
 router.post('/projects',upload.single('image'),async(req,res,next)=>{
         try {
                 const { title, desc, githurl,tech } = req.body

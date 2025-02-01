@@ -1,5 +1,6 @@
 import User from '../model/mongodbmodel.js';
 import Exp from '../model/experiencemodel.js';
+import Project from '../model/projectmodel.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
@@ -197,6 +198,31 @@ export const projectService=async(data,user)=>{
             data: data
         }
         return obj
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getprojectService=async(data)=>{
+    try {
+        console.log("inside getproject service");
+        const data=await Project.find()
+        if (data) {
+            console.log("getting data", JSON.stringify(data));
+            const obj = {
+                status: 0,
+                message: "Getting your projects!",
+                data: data
+            }
+            return obj
+        }else {
+            const errorobj = {
+                status: 1,
+                message: "Didn't getting your projects!",
+                data: error
+            }
+            return errorobj
+        }
     } catch (error) {
         console.log(error);
     }

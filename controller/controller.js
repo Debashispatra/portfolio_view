@@ -3,7 +3,8 @@ import { registerService,
         experienceService,
         getexperienceService,
         emailService,
-        projectService} from '../service/index.js'
+        projectService,
+        getprojectService} from '../service/index.js'
 
 export const registerController = async (req, res) => {
     const register = await registerService(req.body)
@@ -195,6 +196,30 @@ export const projectController=async(req,res)=>{
         } else {
             res.status(500).json({
                 message: "user didn't added"
+            })
+        }
+    } catch (error) {
+        res.status(401).json({
+            message: error
+        })
+    }
+}
+
+export const getprojectController=async(req,res)=>{
+    console.log("inside getprojects controller");
+    const get = await getprojectService(req.body)
+    try {
+        if (get.status == 0) {
+            res.status(200).json({
+                status: get.status,
+                message: get.message,
+                data: get.data
+            })
+        } else if (get.status == 1) {
+            res.status(200).json({
+                status: get.status,
+                message: get.message,
+                data: get.data
             })
         }
     } catch (error) {
