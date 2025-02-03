@@ -5,7 +5,8 @@ import {registerController,
         getexperienceController,
         emailController,
         projectController,
-        getprojectController} from '../controller/controller.js'
+        getprojectController,
+        tokendataController} from '../controller/controller.js'
 import { jwtToken } from "../middleware/index.js";
 import multer from "multer";
 import { promises as fs } from 'fs';

@@ -4,25 +4,30 @@ import Project from '../model/projectmodel.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
-import crypto from"crypto";
+import crypto from "crypto";
 
 
-const secretKey = 'encryptedPassword';
+const secretKey = crypto.scryptSync("encdeckey", "salt", 32);
 const algorithm = 'aes-256-cbc';
+const iv = crypto.randomBytes(16)
 
 function encrypt(text) {
-    const cipher = crypto.createCipher(algorithm, secretKey);
+    const cipher = crypto.createCipheriv(algorithm, secretKey, iv);
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    return encrypted;
+    return iv.toString('hex') + ':' + encrypted;
 }
 function decrypt(encryptedText) {
-    const decipher = crypto.createDecipher(algorithm, secretKey);
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    const parts = encryptedText.split(':');
+    const iv = Buffer.from(parts[0], 'hex'); // Extract IV
+    const encryptedData = parts[1];
+
+    const decipher = crypto.createDecipheriv(algorithm, secretKey, iv);
+    let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
     return decrypted;
 }
-  
+
 export const registerService = async (data) => {
     try {
         console.log("inside register service");
@@ -67,23 +72,23 @@ export const loginService = async (data) => {
             const decryptedData = decrypt(userData.password);
             console.log('Decrypted Data:', decryptedData);
             // const passwordMatch = await bcrypt.compare(password, userData.password)
-            if (password===decryptedData) {
+            if (password === decryptedData) {
                 let getdata = {
                     userName: userData.userName,
                     role: userData.role
                 }
                 let secretkey = "jwt"
                 const token = jwt.sign(getdata, secretkey)
-                let str=`${getdata.userName}`
-                let yourname=str.toUpperCase()
+                let str = `${getdata.userName}`
+                let yourname = str.toUpperCase()
                 const responseData = {
                     status: 0,
                     message: `Hii ${yourname} you have LogedIn Successfully!!`,
                     authToken: token,
-                    data:getdata
+                    data: getdata
                 }
                 return responseData
-            }else{
+            } else {
                 const errorResponse = {
                     status: 1,
                     message: "Wrong password entered",
@@ -116,7 +121,7 @@ export const experienceService = async (data) => {
                 data: data
             }
             return obj
-        }else {
+        } else {
             const errorobj = {
                 status: 1,
                 message: "Your experienced company details Failed",
@@ -129,10 +134,10 @@ export const experienceService = async (data) => {
     }
 }
 
-export const getexperienceService=async(data)=>{
+export const getexperienceService = async (data) => {
     try {
         console.log("inside getexperience service");
-        const data=await Exp.find()
+        const data = await Exp.find()
         if (data) {
             console.log("getting data", JSON.stringify(data));
             const obj = {
@@ -141,7 +146,7 @@ export const getexperienceService=async(data)=>{
                 data: data
             }
             return obj
-        }else {
+        } else {
             const errorobj = {
                 status: 1,
                 message: "Didn't getting your experienced companies!",
@@ -154,18 +159,18 @@ export const getexperienceService=async(data)=>{
     }
 }
 
-export const emailService=async(data)=>{
+export const emailService = async (data) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'debasishpatra133@gmail.com',
-          pass: 'coaoguhrwtjfwcow',
+            user: 'debasishpatra133@gmail.com',
+            pass: 'coaoguhrwtjfwcow',
         },
-      });
-    const {email}=data
+    });
+    const { email } = data
     try {
-        const user=await User.findOne({email:email})
-        console.log("email found",user);
+        const user = await User.findOne({ email: email })
+        console.log("email found", user);
         const decryptedPassword = decrypt(user.password);
         console.log('Decrypted password:', decryptedPassword);
         await user.save();
@@ -174,14 +179,14 @@ export const emailService=async(data)=>{
             to: email,
             subject: 'Forget Password',
             text: `Hyy your password is: ${decryptedPassword}`,
-          };
-      
-        const send=await transporter.sendMail(mailOptions);
+        };
+
+        const send = await transporter.sendMail(mailOptions);
         console.log("Email send successfully");
-        const obj={
+        const obj = {
             status: 0,
             message: "Email send successfully",
-            email:email
+            email: email
         }
         return obj
     } catch (error) {
@@ -189,7 +194,7 @@ export const emailService=async(data)=>{
     }
 }
 
-export const projectService=async(data,user)=>{
+export const projectService = async (data, user) => {
     try {
         let data = user
         console.log('data----', data);
@@ -203,10 +208,10 @@ export const projectService=async(data,user)=>{
     }
 }
 
-export const getprojectService=async(data)=>{
+export const getprojectService = async (data) => {
     try {
         console.log("inside getproject service");
-        const data=await Project.find()
+        const data = await Project.find()
         if (data) {
             console.log("getting data", JSON.stringify(data));
             const obj = {
@@ -215,7 +220,7 @@ export const getprojectService=async(data)=>{
                 data: data
             }
             return obj
-        }else {
+        } else {
             const errorobj = {
                 status: 1,
                 message: "Didn't getting your projects!",

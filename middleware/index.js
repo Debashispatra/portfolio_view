@@ -43,7 +43,7 @@ export const jwtToken = (req, res, next) => {
                 greeting_message: 'Good Morning',
             }
             res.status(200).json({
-                message: 'get',
+                message: 'You are not a admin',
                 username: userName,
                 greeting_message: obj.greeting_message
             })
@@ -52,7 +52,7 @@ export const jwtToken = (req, res, next) => {
                 greeting_message: 'Good Afternoon',
             }
             res.status(200).json({
-                message: 'get',
+                message: 'You are not a admin',
                 username: userName,
                 greeting_message: obj.greeting_message
             })
@@ -61,7 +61,7 @@ export const jwtToken = (req, res, next) => {
                 greeting_message: 'Good Evening',
             }
             res.status(200).json({
-                message: 'get',
+                message: 'You are not a admin',
                 username: userName,
                 greeting_message: obj.greeting_message
             })
@@ -70,7 +70,7 @@ export const jwtToken = (req, res, next) => {
                 greeting_message: 'Good Night'
             }
             res.status(200).json({
-                message: 'get',
+                message: 'You are not a admin',
                 username: userName,
                 greeting_message: obj.greeting_message
             })

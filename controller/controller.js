@@ -56,10 +56,6 @@ export const loginController = async (req, res) => {
 export const tokendataController = async (req, res) => {
     const userName = req.userName
     console.log('>>>>>>', userName);
-    // let objController={
-    //     userName
-    // }
-    // const getaAll = await getalluser(req, res,objController)
     var today = new Date()
     var curHr = today.getHours()
     try {
